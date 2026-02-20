@@ -24,10 +24,9 @@ def _seed_admin_user() -> None:
                 admin = Usuario(
                     username="admin",
                     email="admin@inei.gob.pe",
-                    hashed_password=hash_password("Admin123!"),
+                    password_hash=hash_password("Admin123!"),
                     nombre_completo="Administrador INEI",
                     rol="ADMIN",
-                    area="OTIN",
                     activo=True,
                 )
                 db.add(admin)
