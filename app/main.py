@@ -10,13 +10,46 @@ settings = get_settings()
 logger = logging.getLogger(__name__)
 
 
+def _seed_admin_user() -> None:
+    """Create default admin user if no users exist in the database."""
+    try:
+        from app.database import SessionLocal
+        from app.models.usuario import Usuario
+        from app.utils.security import hash_password
+
+        db = SessionLocal()
+        try:
+            count = db.query(Usuario).count()
+            if count == 0:
+                admin = Usuario(
+                    username="admin",
+                    email="admin@inei.gob.pe",
+                    hashed_password=hash_password("Admin123!"),
+                    nombre_completo="Administrador INEI",
+                    rol="ADMIN",
+                    area="OTIN",
+                    activo=True,
+                )
+                db.add(admin)
+                db.commit()
+                logger.info("✅ Admin user created: admin / Admin123!")
+            else:
+                logger.info("Users already exist (%d), skipping admin seed.", count)
+        finally:
+            db.close()
+    except Exception as exc:
+        logger.warning("Could not seed admin user: %s", exc)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Startup: seed admin user if DB is empty
+    _seed_admin_user()
+
     # Startup: generate plantillas if they don't exist
     try:
         from app.services.template_service import generate_all_templates
         plantillas_dir = settings.PLANTILLAS_DIR
-        # Only generate if directory is empty (no .xlsx files)
         existing = list(plantillas_dir.glob("*.xlsx"))
         if not existing:
             logger.info("Generating Excel plantillas on startup...")
