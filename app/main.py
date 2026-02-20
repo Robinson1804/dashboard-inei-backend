@@ -21,7 +21,9 @@ def _seed_admin_user() -> None:
         try:
             count = db.query(Usuario).count()
             print(f"[SEED] Usuarios en BD: {count}", flush=True)
-            if count == 0:
+            # Always ensure admin exists with correct password
+            admin = db.query(Usuario).filter(Usuario.username == "admin").first()
+            if admin is None:
                 admin = Usuario(
                     username="admin",
                     email="admin@inei.gob.pe",
@@ -34,7 +36,11 @@ def _seed_admin_user() -> None:
                 db.commit()
                 print("[SEED] ✅ Admin creado: admin / Admin123!", flush=True)
             else:
-                print(f"[SEED] Usuarios ya existen ({count}), omitiendo seed.", flush=True)
+                # Reset password to ensure it's correct
+                admin.password_hash = hash_password("Admin123!")
+                admin.activo = True
+                db.commit()
+                print("[SEED] ✅ Admin password actualizado: admin / Admin123!", flush=True)
         finally:
             db.close()
     except Exception as exc:
