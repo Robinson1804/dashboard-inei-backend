@@ -3,8 +3,8 @@ from pathlib import Path
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
-# Project root: Sistema-Dashboard/
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+# Backend root (works both locally inside Sistema-Dashboard/backend/ and in Railway where the repo IS the backend)
+_BACKEND_ROOT = Path(__file__).resolve().parent.parent
 
 
 class Settings(BaseSettings):
@@ -21,13 +21,20 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     API_PREFIX: str = "/api"
 
-    # CORS
-    CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003", "http://localhost:80"]
+    # CORS — se puede sobreescribir con env var CORS_ORIGINS como JSON array
+    CORS_ORIGINS: list[str] = [
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://localhost:3002",
+        "http://localhost:3003",
+        "http://localhost:80",
+        "https://dashboard-inei-frontend-production.up.railway.app",
+    ]
 
     # File storage
-    FORMATOS_DIR: Path = _PROJECT_ROOT / "formatos"
-    PLANTILLAS_DIR: Path = _PROJECT_ROOT / "formatos" / "plantillas"
-    UPLOADS_DIR: Path = _PROJECT_ROOT / "formatos" / "uploads"
+    FORMATOS_DIR: Path = _BACKEND_ROOT / "formatos"
+    PLANTILLAS_DIR: Path = _BACKEND_ROOT / "formatos" / "plantillas"
+    UPLOADS_DIR: Path = _BACKEND_ROOT / "formatos" / "uploads"
 
     model_config = {"env_file": ".env", "extra": "ignore"}
 
