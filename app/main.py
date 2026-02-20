@@ -20,6 +20,7 @@ def _seed_admin_user() -> None:
         db = SessionLocal()
         try:
             count = db.query(Usuario).count()
+            print(f"[SEED] Usuarios en BD: {count}", flush=True)
             if count == 0:
                 admin = Usuario(
                     username="admin",
@@ -31,13 +32,13 @@ def _seed_admin_user() -> None:
                 )
                 db.add(admin)
                 db.commit()
-                logger.info("✅ Admin user created: admin / Admin123!")
+                print("[SEED] ✅ Admin creado: admin / Admin123!", flush=True)
             else:
-                logger.info("Users already exist (%d), skipping admin seed.", count)
+                print(f"[SEED] Usuarios ya existen ({count}), omitiendo seed.", flush=True)
         finally:
             db.close()
     except Exception as exc:
-        logger.warning("Could not seed admin user: %s", exc)
+        print(f"[SEED] ERROR: {exc}", flush=True)
 
 
 @asynccontextmanager
