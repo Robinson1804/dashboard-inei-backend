@@ -17,7 +17,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class KpiPresupuestoResponse(BaseModel):
-    """Aggregate figures displayed in the four KPI cards at the top of the
+    """Aggregate figures displayed in the KPI cards at the top of the
     Budget Dashboard.
 
     Attributes:
@@ -25,6 +25,7 @@ class KpiPresupuestoResponse(BaseModel):
         total_metas: Number of distinct MetaPresupuestal with budget records.
         pim_total: Sum of PIM (Modified Institutional Budget) in soles.
         certificado_total: Sum of certificado amounts in soles.
+        comprometido_total: Sum of compromiso_anual amounts in soles.
         devengado_total: Sum of devengado (accrued expenditure) in soles.
         ejecucion_porcentaje: Devengado / PIM as a percentage (0–100).
     """
@@ -33,6 +34,7 @@ class KpiPresupuestoResponse(BaseModel):
     total_metas: int = Field(..., ge=0, description="Cantidad de Metas Presupuestales con presupuesto.")
     pim_total: float = Field(..., description="Suma del PIM en soles.")
     certificado_total: float = Field(..., description="Suma del monto certificado en soles.")
+    comprometido_total: float = Field(..., description="Suma del compromiso anual en soles.")
     devengado_total: float = Field(..., description="Suma del devengado en soles.")
     ejecucion_porcentaje: float = Field(
         ...,
@@ -48,6 +50,7 @@ class KpiPresupuestoResponse(BaseModel):
                 "total_metas": 187,
                 "pim_total": 245_000_000.0,
                 "certificado_total": 198_500_000.0,
+                "comprometido_total": 185_000_000.0,
                 "devengado_total": 175_320_000.0,
                 "ejecucion_porcentaje": 71.56,
             }

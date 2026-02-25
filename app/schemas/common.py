@@ -46,6 +46,12 @@ class FilterParams(BaseModel):
             "None = todas las fuentes."
         ),
     )
+    mes: int | None = Field(
+        default=None,
+        ge=1,
+        le=12,
+        description="Mes del año (1=Enero … 12=Diciembre). None = todos los meses.",
+    )
 
 
 class PaginationParams(BaseModel):

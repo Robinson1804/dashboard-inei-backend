@@ -67,6 +67,10 @@ def _filter_params(
             max_length=100,
         ),
     ] = None,
+    mes: Annotated[
+        int | None,
+        Query(description="Mes del año (1=Enero … 12=Diciembre). Omitir para todos.", ge=1, le=12),
+    ] = None,
 ) -> FilterParams:
     """Assemble a ``FilterParams`` instance from URL query parameters.
 
@@ -78,6 +82,7 @@ def _filter_params(
         ue_id: Optional UnidadEjecutora primary key.
         meta_id: Optional MetaPresupuestal primary key.
         fuente: Optional funding-source string.
+        mes: Optional month number (1–12).
 
     Returns:
         A validated ``FilterParams`` instance.
@@ -87,6 +92,7 @@ def _filter_params(
         ue_id=ue_id,
         meta_id=meta_id,
         fuente_financiamiento=fuente,
+        mes=mes,
     )
 
 

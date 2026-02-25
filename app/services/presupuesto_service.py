@@ -118,6 +118,7 @@ def get_kpis(db: Session, filters: FilterParams) -> KpiPresupuestoResponse:
         func.count(func.distinct(ProgramacionPresupuestal.meta_id)).label("total_metas"),
         func.coalesce(func.sum(ProgramacionPresupuestal.pim), 0).label("pim_total"),
         func.coalesce(func.sum(ProgramacionPresupuestal.certificado), 0).label("certificado_total"),
+        func.coalesce(func.sum(ProgramacionPresupuestal.compromiso_anual), 0).label("comprometido_total"),
         func.coalesce(func.sum(ProgramacionPresupuestal.devengado), 0).label("devengado_total"),
     )
     q = _apply_pp_filters(q, filters)
@@ -125,6 +126,7 @@ def get_kpis(db: Session, filters: FilterParams) -> KpiPresupuestoResponse:
 
     pim_total = float(row.pim_total)
     certificado_total = float(row.certificado_total)
+    comprometido_total = float(row.comprometido_total)
     devengado_total = float(row.devengado_total)
 
     logger.debug(
@@ -137,6 +139,7 @@ def get_kpis(db: Session, filters: FilterParams) -> KpiPresupuestoResponse:
         total_metas=row.total_metas,
         pim_total=pim_total,
         certificado_total=certificado_total,
+        comprometido_total=comprometido_total,
         devengado_total=devengado_total,
         ejecucion_porcentaje=_safe_pct(devengado_total, pim_total),
     )
@@ -269,6 +272,9 @@ def get_grafico_devengado_mensual(
         )
     )
     q = _apply_pp_filters(q, filters)
+    # If a specific month is requested, restrict to that month only
+    if filters.mes is not None:
+        q = q.filter(ProgramacionMensual.mes == filters.mes)
     q = q.group_by(ProgramacionMensual.mes).order_by(ProgramacionMensual.mes)
 
     # Build a dict keyed by month number for O(1) lookup
@@ -277,8 +283,14 @@ def get_grafico_devengado_mensual(
         for row in q.all()
     }
 
+    # Determine which month range to return
+    if filters.mes is not None:
+        mes_range = range(filters.mes, filters.mes + 1)
+    else:
+        mes_range = range(1, 13)
+
     items: list[GraficoEvolucionItem] = []
-    for mes_num in range(1, 13):
+    for mes_num in mes_range:
         programado, ejecutado = mes_data.get(mes_num, (0.0, 0.0))
         items.append(
             GraficoEvolucionItem(
