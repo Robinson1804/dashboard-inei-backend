@@ -86,23 +86,19 @@ def upgrade() -> None:
         WHERE ue_id IN (SELECT id FROM unidad_ejecutora WHERE sigla LIKE 'ODEI-%')
     """))
 
-    # Paso 8: programacion_mensual
+    # Paso 8: programacion_mensual (pp tiene ue_id directo)
     conn.execute(sa.text("""
         DELETE FROM programacion_mensual
         WHERE programacion_presupuestal_id IN (
-            SELECT pp.id FROM programacion_presupuestal pp
-            JOIN meta_presupuestal mp ON pp.meta_presupuestal_id = mp.id
-            WHERE mp.ue_id IN (SELECT id FROM unidad_ejecutora WHERE sigla LIKE 'ODEI-%')
+            SELECT id FROM programacion_presupuestal
+            WHERE ue_id IN (SELECT id FROM unidad_ejecutora WHERE sigla LIKE 'ODEI-%')
         )
     """))
 
-    # Paso 9: programacion_presupuestal
+    # Paso 9: programacion_presupuestal (tiene ue_id directo)
     conn.execute(sa.text("""
         DELETE FROM programacion_presupuestal
-        WHERE meta_presupuestal_id IN (
-            SELECT id FROM meta_presupuestal
-            WHERE ue_id IN (SELECT id FROM unidad_ejecutora WHERE sigla LIKE 'ODEI-%')
-        )
+        WHERE ue_id IN (SELECT id FROM unidad_ejecutora WHERE sigla LIKE 'ODEI-%')
     """))
 
     # Paso 10: meta_presupuestal
