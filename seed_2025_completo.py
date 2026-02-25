@@ -70,8 +70,6 @@ def _d(y: int, m: int, d_: int) -> date:
 
 def _fuente_financiamiento(sigla: str, indice: int) -> str:
     """Determina la fuente de financiamiento segun tipo de UE."""
-    if sigla.startswith("ODEI-") and indice % 5 == 4:
-        return "Recursos Directamente Recaudados"
     return "Recursos Ordinarios"
 
 
@@ -116,34 +114,6 @@ def _calcular_meses(
 # Datos maestros — UEs
 # ---------------------------------------------------------------------------
 
-ODEIS_DATOS = [
-    ("O-AMA", "ODEI Amazonas",      "ODEI-AMA", "ODEI"),
-    ("O-ANC", "ODEI Ancash",        "ODEI-ANC", "ODEI"),
-    ("O-APU", "ODEI Apurimac",      "ODEI-APU", "ODEI"),
-    ("O-ARE", "ODEI Arequipa",      "ODEI-ARE", "ODEI"),
-    ("O-AYA", "ODEI Ayacucho",      "ODEI-AYA", "ODEI"),
-    ("O-CAJ", "ODEI Cajamarca",     "ODEI-CAJ", "ODEI"),
-    ("O-CAL", "ODEI Callao",        "ODEI-CAL", "ODEI"),
-    ("O-CUS", "ODEI Cusco",         "ODEI-CUS", "ODEI"),
-    ("O-HVC", "ODEI Huancavelica",  "ODEI-HVC", "ODEI"),
-    ("O-HUC", "ODEI Huanuco",       "ODEI-HUC", "ODEI"),
-    ("O-ICA", "ODEI Ica",           "ODEI-ICA", "ODEI"),
-    ("O-JUN", "ODEI Junin",         "ODEI-JUN", "ODEI"),
-    ("O-LAL", "ODEI La Libertad",   "ODEI-LAL", "ODEI"),
-    ("O-LAM", "ODEI Lambayeque",    "ODEI-LAM", "ODEI"),
-    ("O-LIM", "ODEI Lima",          "ODEI-LIM", "ODEI"),
-    ("O-LOR", "ODEI Loreto",        "ODEI-LOR", "ODEI"),
-    ("O-MAD", "ODEI Madre de Dios", "ODEI-MAD", "ODEI"),
-    ("O-MOQ", "ODEI Moquegua",      "ODEI-MOQ", "ODEI"),
-    ("O-PAS", "ODEI Pasco",         "ODEI-PAS", "ODEI"),
-    ("O-PIU", "ODEI Piura",         "ODEI-PIU", "ODEI"),
-    ("O-PUN", "ODEI Puno",          "ODEI-PUN", "ODEI"),
-    ("O-SAM", "ODEI San Martin",    "ODEI-SAM", "ODEI"),
-    ("O-TAC", "ODEI Tacna",         "ODEI-TAC", "ODEI"),
-    ("O-TUM", "ODEI Tumbes",        "ODEI-TUM", "ODEI"),
-    ("O-UCA", "ODEI Ucayali",       "ODEI-UCA", "ODEI"),
-]
-
 # ---------------------------------------------------------------------------
 # Datos maestros — Clasificadores de gasto
 # ---------------------------------------------------------------------------
@@ -182,43 +152,17 @@ UE_BUDGET_2025: dict[str, int] = {
     "DNCE":      5_200_000,
     "DNEL":      3_900_000,
     "DTI":       4_100_000,
-    "ODEI-ARE":  5_200_000,
-    "ODEI-LAL":  4_800_000,
-    "ODEI-PIU":  4_500_000,
-    "ODEI-CUS":  4_200_000,
-    "ODEI-JUN":  4_000_000,
-    "ODEI-LAM":  3_800_000,
-    "ODEI-CAJ":  3_500_000,
-    "ODEI-LIM":  3_500_000,
-    "ODEI-ANC":  3_300_000,
-    "ODEI-PUN":  3_200_000,
-    "ODEI-ICA":  3_100_000,
-    "ODEI-SAM":  3_000_000,
-    "ODEI-AYA":  2_900_000,
-    "ODEI-LOR":  2_800_000,
-    "ODEI-UCA":  2_200_000,
-    "ODEI-CAL":  2_300_000,
-    "ODEI-HUC":  2_100_000,
-    "ODEI-TAC":  1_800_000,
-    "ODEI-AMA":  1_800_000,
-    "ODEI-APU":  1_900_000,
-    "ODEI-HVC":  1_700_000,
-    "ODEI-MOQ":  1_600_000,
-    "ODEI-PAS":  1_500_000,
-    "ODEI-TUM":  1_400_000,
-    "ODEI-MAD":  1_500_000,
 }
 
 UE_EJECUCION_PCT: dict[str, float] = {
-    "OTIN":     97.2,  "DEC":      94.8,  "OTA":      91.5,  "OTPP":     88.3,
-    "DNCPP":    95.1,  "DNCE":     86.7,  "DNEL":     82.4,  "DTI":      90.6,
-    "ODEI-ARE": 96.4,  "ODEI-LAL": 93.2,  "ODEI-PIU": 89.8,  "ODEI-CUS": 94.7,
-    "ODEI-JUN": 88.5,  "ODEI-LAM": 91.3,  "ODEI-CAJ": 84.6,  "ODEI-LIM": 87.9,
-    "ODEI-ANC": 92.1,  "ODEI-PUN": 85.3,  "ODEI-ICA": 93.6,  "ODEI-SAM": 86.2,
-    "ODEI-AYA": 79.4,  "ODEI-LOR": 83.7,  "ODEI-UCA": 88.1,  "ODEI-CAL": 90.5,
-    "ODEI-HUC": 81.9,  "ODEI-TAC": 94.2,  "ODEI-AMA": 76.3,  "ODEI-APU": 78.8,
-    "ODEI-HVC": 72.5,  "ODEI-MOQ": 95.8,  "ODEI-PAS": 74.1,  "ODEI-TUM": 91.7,
-    "ODEI-MAD": 80.2,
+    "OTIN":  97.2,
+    "DEC":   94.8,
+    "OTA":   91.5,
+    "OTPP":  88.3,
+    "DNCPP": 95.1,
+    "DNCE":  86.7,
+    "DNEL":  82.4,
+    "DTI":   90.6,
 }
 
 # Clasificadores por grupo de UE (codigo, porcentaje del PIM)
@@ -252,14 +196,6 @@ CLASIFS_DTI: list[tuple[str, float]] = [
     ("2.3.2.2.2.3",   0.20),
     ("2.3.2.8.1.1",   0.10),
     ("2.3.1.5.1.2",   0.05),
-]
-
-CLASIFS_ODEIS: list[tuple[str, float]] = [
-    ("2.3.2.9.1.1",  0.28),
-    ("2.3.2.9.2.1",  0.27),
-    ("2.3.1.3.1.1",  0.20),
-    ("2.3.2.1.2.1",  0.15),
-    ("2.3.2.1.2.2",  0.10),
 ]
 
 UE_CLASIFS_MAP: dict[str, list[tuple[str, float]]] = {
@@ -362,18 +298,18 @@ ADQ_DATA: list[tuple[int, str, str, str, str, str, float]] = [
     (8,  "DNCPP",    "Adquisicion de Tablets para Empadronadores",                 "BIEN",     "SUBASTA_INVERSA",      "CULMINADO",              650_000.00),
     (9,  "DTI",      "Adquisicion de Equipos de Seguridad Electronica",            "BIEN",     "LICITACION_PUBLICA",   "ADJUDICADO",             420_000.00),
     (10, "DNEL",     "Servicio de Consultoria en Estadisticas Laborales",          "SERVICIO", "CONCURSO_PUBLICO",     "CULMINADO",              280_000.00),
-    (11, "ODEI-ARE", "Adquisicion de Mobiliario para Oficinas Regionales",         "BIEN",     "COMPARACION_PRECIOS",  "CULMINADO",              185_000.00),
-    (12, "ODEI-LAL", "Servicio de Mantenimiento Vehicular",                        "SERVICIO", "COMPARACION_PRECIOS",  "CULMINADO",              125_000.00),
-    (13, "ODEI-PIU", "Adquisicion de Equipos de Computo",                          "BIEN",     "SUBASTA_INVERSA",      "CULMINADO",              290_000.00),
-    (14, "ODEI-CUS", "Servicio de Limpieza y Mantenimiento",                       "SERVICIO", "COMPARACION_PRECIOS",  "CULMINADO",               98_000.00),
-    (15, "ODEI-JUN", "Adquisicion de Material de Escritorio",                      "BIEN",     "COMPARACION_PRECIOS",  "CULMINADO",               75_000.00),
-    (16, "ODEI-LAM", "Consultoria para Levantamiento de Informacion",              "SERVICIO", "CONCURSO_PUBLICO",     "ADJUDICADO",             340_000.00),
-    (17, "ODEI-ANC", "Adquisicion de Vehiculo para Campo",                         "BIEN",     "LICITACION_PUBLICA",   "CULMINADO",              155_000.00),
-    (18, "ODEI-ICA", "Servicio de Seguridad Vigilancia",                           "SERVICIO", "COMPARACION_PRECIOS",  "CULMINADO",               88_000.00),
-    (19, "ODEI-PUN", "Adquisicion de Equipos de Medicion",                         "BIEN",     "COMPARACION_PRECIOS",  "ADJUDICADO",             210_000.00),
-    (20, "ODEI-SAM", "Servicio de Capacitacion para Personal",                     "SERVICIO", "CONCURSO_PUBLICO",     "DESIERTO",               145_000.00),
-    (21, "ODEI-TAC", "Adquisicion de Software de Gestion",                         "BIEN",     "SUBASTA_INVERSA",      "CULMINADO",               95_000.00),
-    (22, "ODEI-ARE", "Servicio de Consultoria en TI para ODEI",                    "SERVICIO", "CONCURSO_PUBLICO",     "EN_SELECCION",           520_000.00),
+    (11, "OTIN",     "Adquisicion de Mobiliario de Oficina Institucional",         "BIEN",     "COMPARACION_PRECIOS",  "CULMINADO",              185_000.00),
+    (12, "DEC",      "Servicio de Mantenimiento de Vehiculos Institucionales",      "SERVICIO", "COMPARACION_PRECIOS",  "CULMINADO",              125_000.00),
+    (13, "DTI",      "Adquisicion de Equipos de Computo para Sede Central",         "BIEN",     "SUBASTA_INVERSA",      "CULMINADO",              290_000.00),
+    (14, "OTA",      "Servicio de Limpieza y Mantenimiento de Edificio",            "SERVICIO", "COMPARACION_PRECIOS",  "CULMINADO",               98_000.00),
+    (15, "OTPP",     "Adquisicion de Material de Escritorio Institucional",         "BIEN",     "COMPARACION_PRECIOS",  "CULMINADO",               75_000.00),
+    (16, "DNCE",     "Consultoria para Diseno de Informes Estadisticos",            "SERVICIO", "CONCURSO_PUBLICO",     "ADJUDICADO",             340_000.00),
+    (17, "DNCPP",    "Adquisicion de Vehiculo para Operaciones de Campo",           "BIEN",     "LICITACION_PUBLICA",   "CULMINADO",              155_000.00),
+    (18, "DNEL",     "Servicio de Seguridad y Vigilancia Institucional",            "SERVICIO", "COMPARACION_PRECIOS",  "CULMINADO",               88_000.00),
+    (19, "DTI",      "Adquisicion de Equipos de Medicion y Calibracion",            "BIEN",     "COMPARACION_PRECIOS",  "ADJUDICADO",             210_000.00),
+    (20, "OTA",      "Servicio de Capacitacion para Personal Administrativo",       "SERVICIO", "CONCURSO_PUBLICO",     "DESIERTO",               145_000.00),
+    (21, "OTIN",     "Adquisicion de Software de Gestion Documental",               "BIEN",     "SUBASTA_INVERSA",      "CULMINADO",               95_000.00),
+    (22, "DEC",      "Servicio de Consultoria en Tecnologias de Informacion",       "SERVICIO", "CONCURSO_PUBLICO",     "EN_SELECCION",           520_000.00),
 ]
 
 # Mapeo estado → fase_actual
@@ -430,21 +366,21 @@ CM_DATA: list[tuple[str, str, str, str, str, float, float | None, int]] = [
     ("DNEL",     "Adquisicion de Libros y Publicaciones",                   "BIEN",     "MATERIAL BIBLIOG", "PAGADO",        3500.00,  3450.00,  3),
     ("DTI",      "Servicio de Mantenimiento de UPS y Baterias",             "SERVICIO", "MANTENIMIENTO",    "PAGADO",        9000.00,  8850.00,  2),
     ("DTI",      "Adquisicion de Cables y Conectores de Red",               "BIEN",     "SUMINISTROS TI",   "PAGADO",        2100.00,  2080.00,  3),
-    ("ODEI-ARE", "Adquisicion de Combustible para Vehiculos",               "BIEN",     "COMBUSTIBLE",      "PAGADO",       18000.00, 17800.00,  3),
-    ("ODEI-ARE", "Servicio de Limpieza de Oficinas Regionales",             "SERVICIO", "SERVICIOS ADMIN",  "EJECUTADO",    12000.00, 11800.00,  2),
-    ("ODEI-LAL", "Adquisicion de Material de Escritorio",                   "BIEN",     "UTILES OFICINA",   "PAGADO",        4200.00,  4150.00,  3),
-    ("ODEI-LAL", "Servicio de Mantenimiento de Fotocopiadora",              "SERVICIO", "MANTENIMIENTO",    "PAGADO",        3800.00,  3750.00,  2),
-    ("ODEI-PIU", "Adquisicion de Papel y Consumibles de Oficina",           "BIEN",     "UTILES OFICINA",   "PAGADO",        5600.00,  5500.00,  3),
-    ("ODEI-PIU", "Servicio de Mensajeria Regional",                         "SERVICIO", "TRANSPORTE",       "EJECUTADO",     8000.00,  7850.00,  2),
-    ("ODEI-CUS", "Adquisicion de Suministros para Campo",                   "BIEN",     "MATERIAL CAMPO",   "PAGADO",        7200.00,  7100.00,  3),
-    ("ODEI-JUN", "Adquisicion de Equipo Menor de Oficina",                  "BIEN",     "UTILES OFICINA",   "PAGADO",        3900.00,  3850.00,  3),
-    ("ODEI-ANC", "Servicio de Limpieza",                                    "SERVICIO", "SERVICIOS ADMIN",  "PAGADO",        9000.00,  8900.00,  2),
-    ("ODEI-PUN", "Adquisicion de Combustible",                              "BIEN",     "COMBUSTIBLE",      "PAGADO",       14000.00, 13800.00,  3),
-    ("ODEI-ICA", "Servicio de Soporte Tecnico",                             "SERVICIO", "SOPORTE TI",       "EJECUTADO",     5500.00,  5400.00,  2),
-    ("ODEI-SAM", "Adquisicion de Material de Campo",                        "BIEN",     "MATERIAL CAMPO",   "PAGADO",        3300.00,  3250.00,  3),
-    ("ODEI-TAC", "Adquisicion de Toner y Cartuchos",                        "BIEN",     "SUMINISTROS TI",   "PAGADO",        2800.00,  2750.00,  3),
-    ("ODEI-LOR", "Servicio de Mantenimiento Vehicular",                     "SERVICIO", "MANTENIMIENTO",    "ORDEN_EMITIDA", 7500.00,  None,     2),
-    ("ODEI-HVC", "Adquisicion de Uniformes para Personal",                  "BIEN",     "VESTUARIO",        "PENDIENTE",     6500.00,  None,     0),
+    ("OTIN",     "Adquisicion de Combustible para Vehiculos Institucionales",  "BIEN",     "COMBUSTIBLE",      "PAGADO",       18000.00, 17800.00,  3),
+    ("OTIN",     "Servicio de Limpieza de Oficinas Sede Central",             "SERVICIO", "SERVICIOS ADMIN",  "EJECUTADO",    12000.00, 11800.00,  2),
+    ("DEC",      "Adquisicion de Material de Escritorio para DEC",            "BIEN",     "UTILES OFICINA",   "PAGADO",        4200.00,  4150.00,  3),
+    ("DEC",      "Servicio de Mantenimiento de Fotocopiadoras DEC",           "SERVICIO", "MANTENIMIENTO",    "PAGADO",        3800.00,  3750.00,  2),
+    ("OTA",      "Adquisicion de Papel y Consumibles de Impresion",           "BIEN",     "UTILES OFICINA",   "PAGADO",        5600.00,  5500.00,  3),
+    ("OTA",      "Servicio de Mensajeria Institucional",                      "SERVICIO", "TRANSPORTE",       "EJECUTADO",     8000.00,  7850.00,  2),
+    ("OTPP",     "Adquisicion de Suministros para Operaciones de Campo",      "BIEN",     "MATERIAL CAMPO",   "PAGADO",        7200.00,  7100.00,  3),
+    ("DNCE",     "Adquisicion de Equipo Menor de Oficina DNCE",               "BIEN",     "UTILES OFICINA",   "PAGADO",        3900.00,  3850.00,  3),
+    ("DNCPP",    "Servicio de Limpieza para DNCPP",                           "SERVICIO", "SERVICIOS ADMIN",  "PAGADO",        9000.00,  8900.00,  2),
+    ("DNEL",     "Adquisicion de Combustible para DNEL",                      "BIEN",     "COMBUSTIBLE",      "PAGADO",       14000.00, 13800.00,  3),
+    ("DTI",      "Servicio de Soporte Tecnico Especializado",                 "SERVICIO", "SOPORTE TI",       "EJECUTADO",     5500.00,  5400.00,  2),
+    ("OTIN",     "Adquisicion de Material de Campo para Encuestas",           "BIEN",     "MATERIAL CAMPO",   "PAGADO",        3300.00,  3250.00,  3),
+    ("DEC",      "Adquisicion de Toner y Cartuchos para DEC",                 "BIEN",     "SUMINISTROS TI",   "PAGADO",        2800.00,  2750.00,  3),
+    ("DTI",      "Servicio de Mantenimiento de Vehiculos DTI",                "SERVICIO", "MANTENIMIENTO",    "ORDEN_EMITIDA", 7500.00,  None,     2),
+    ("OTA",      "Adquisicion de Uniformes para Personal OTA",                "BIEN",     "VESTUARIO",        "PENDIENTE",     6500.00,  None,     0),
 ]
 
 # ---------------------------------------------------------------------------
@@ -509,70 +445,70 @@ AO_DATA: list[tuple[str, str, str, str, str, float]] = [
      "Conservar activos institucionales",
      "Ejecutar mantenimiento preventivo y correctivo",
      91.6),
-    ("ODEI-ARE", "AOI00000500015", "Estadisticas Regionales Arequipa 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
+    ("OTIN",     "AOI00000500015", "Modernizacion de Sistemas de Informacion Estadistica",
+     "Implementar nuevas plataformas digitales",
+     "Desarrollar sistemas de gestion de datos",
+     95.3),
+    ("DEC",      "AOI00000500016", "Encuesta de Condiciones de Vida y Pobreza 2025",
+     "Medir niveles de bienestar de la poblacion",
+     "Ejecutar encuesta ENAHO a nivel nacional",
+     91.8),
+    ("OTA",      "AOI00000500017", "Gestion de Recursos Humanos y Bienestar del Personal",
+     "Optimizar gestion del capital humano",
+     "Implementar sistema de evaluacion de desempeno",
+     87.4),
+    ("OTPP",     "AOI00000500018", "Planificacion Estrategica y Presupuestal 2025-2027",
+     "Alinear objetivos institucionales con recursos",
+     "Elaborar Plan Estrategico Institucional",
+     92.6),
+    ("DNCE",     "AOI00000500019", "Produccion de Estadisticas Economicas Sectoriales",
+     "Generar estadisticas del sector empresarial",
+     "Elaborar informes de coyuntura economica",
+     89.1),
+    ("DNCPP",    "AOI00000500020", "Actualizacion del Marco Cartografico Nacional",
+     "Mantener informacion geografica actualizada",
+     "Actualizar base cartografica para censos",
+     86.3),
+    ("DNEL",     "AOI00000500021", "Encuesta Nacional de Empresas 2025",
+     "Medir estructura empresarial del pais",
+     "Levantar datos de unidades economicas",
+     88.7),
+    ("DTI",      "AOI00000500022", "Implementacion de Ciberseguridad Institucional",
+     "Proteger activos de informacion institucionales",
+     "Implementar controles de seguridad informatica",
+     94.5),
+    ("OTIN",     "AOI00000500023", "Desarrollo de la Plataforma de Datos Abiertos INEI",
+     "Democratizar el acceso a datos estadisticos",
+     "Publicar datasets en portal de datos abiertos",
+     90.2),
+    ("DEC",      "AOI00000500024", "Encuesta Nacional de Hogares Rurales 2025",
+     "Medir condiciones en zonas rurales",
+     "Ejecutar ENAHO modulo rural",
+     83.6),
+    ("OTA",      "AOI00000500025", "Gestion Documental y Archivo Institucional",
+     "Preservar memoria institucional",
+     "Digitalizar y organizar archivos historicos",
+     91.0),
+    ("DNCE",     "AOI00000500026", "Publicacion Digital de Estadisticas Oficiales",
+     "Difundir estadisticas por medios digitales",
+     "Actualizar portal web de estadisticas",
+     93.8),
+    ("DNCPP",    "AOI00000500027", "Capacitacion de Encuestadores para Censos 2025",
+     "Fortalecer capacidades del personal de campo",
+     "Ejecutar programa de formacion censal",
+     87.2),
+    ("DNEL",     "AOI00000500028", "Estadisticas de Remuneraciones y Condiciones de Trabajo",
+     "Medir ingresos laborales por sector",
+     "Elaborar indices de remuneraciones",
+     85.4),
+    ("DTI",      "AOI00000500029", "Mantenimiento y Soporte de Sistemas Administrativos",
+     "Garantizar continuidad operativa de sistemas",
+     "Ejecutar mantenimiento preventivo de plataformas",
      96.1),
-    ("ODEI-LAL", "AOI00000500016", "Estadisticas Regionales La Libertad 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     92.8),
-    ("ODEI-PIU", "AOI00000500017", "Estadisticas Regionales Piura 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     88.5),
-    ("ODEI-CUS", "AOI00000500018", "Estadisticas Regionales Cusco 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     94.3),
-    ("ODEI-JUN", "AOI00000500019", "Estadisticas Regionales Junin 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     87.6),
-    ("ODEI-LAM", "AOI00000500020", "Estadisticas Regionales Lambayeque 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     90.9),
-    ("ODEI-ANC", "AOI00000500021", "Estadisticas Regionales Ancash 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     91.5),
-    ("ODEI-PUN", "AOI00000500022", "Estadisticas Regionales Puno 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     84.2),
-    ("ODEI-ICA", "AOI00000500023", "Estadisticas Regionales Ica 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     93.7),
-    ("ODEI-AYA", "AOI00000500024", "Estadisticas Regionales Ayacucho 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     78.4),
-    ("ODEI-HVC", "AOI00000500025", "Estadisticas Regionales Huancavelica 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     72.1),
-    ("ODEI-SAM", "AOI00000500026", "Estadisticas Regionales San Martin 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     85.9),
-    ("ODEI-TAC", "AOI00000500027", "Estadisticas Regionales Tacna 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     94.0),
-    ("ODEI-LOR", "AOI00000500028", "Estadisticas Regionales Loreto 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     82.6),
-    ("ODEI-MOQ", "AOI00000500029", "Estadisticas Regionales Moquegua 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     96.2),
-    ("ODEI-MAD", "AOI00000500030", "Estadisticas Regionales Madre de Dios 2025",
-     "Generar informacion estadistica regional",
-     "Coordinar produccion estadistica en la region",
-     79.8),
+    ("OTPP",     "AOI00000500030", "Evaluacion de Resultados Presupuestales 2025",
+     "Medir eficacia del gasto publico institucional",
+     "Analizar indicadores de desempeno presupuestal",
+     88.9),
 ]
 
 
@@ -910,23 +846,7 @@ def sembrar_2025_completo(force: bool = False) -> None:
         ues: dict[str, UnidadEjecutora] = {
             ue.sigla: ue for ue in session.query(UnidadEjecutora).all()
         }
-        ues_creadas = 0
-        for codigo, nombre, sigla, tipo in ODEIS_DATOS:
-            if sigla not in ues:
-                nueva_ue = UnidadEjecutora(
-                    codigo=codigo,
-                    nombre=nombre,
-                    sigla=sigla,
-                    tipo=tipo,
-                    activo=True,
-                )
-                session.add(nueva_ue)
-                ues[sigla] = nueva_ue
-                ues_creadas += 1
-
-        if ues_creadas > 0:
-            session.flush()
-        print(f"    UEs totales: {len(ues)} | ODEIs creadas: {ues_creadas}")
+        print(f"    UEs encontradas en BD: {len(ues)}")
 
         # Clasificadores
         clasifs: dict[str, ClasificadorGasto] = {
@@ -1001,10 +921,7 @@ def sembrar_2025_completo(force: bool = False) -> None:
             pim_ue = UE_BUDGET_2025[sigla]
             pct_ejec = UE_EJECUCION_PCT.get(sigla, 85.0)
 
-            if sigla.startswith("ODEI-"):
-                clasifs_ue = CLASIFS_ODEIS
-            else:
-                clasifs_ue = UE_CLASIFS_MAP.get(sigla, CLASIFS_ESTADISTICA)
+            clasifs_ue = UE_CLASIFS_MAP.get(sigla, CLASIFS_ESTADISTICA)
 
             for indice_clasif, (cod_clasif, pct_clasif) in enumerate(clasifs_ue):
                 clasif = clasifs.get(cod_clasif)
