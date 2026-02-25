@@ -426,7 +426,7 @@ def sembrar_2025() -> None:
             if ue.id in metas_existentes:
                 metas[sigla] = metas_existentes[ue.id]
             else:
-                codigo_meta = f"{ANIO}-{sigla}-001"
+                codigo_meta = f"25{ue.id:04d}"  # e.g. "250001" — max 6 chars, within String(10)
                 descripcion_meta = f"Meta Presupuestal {ANIO} - {ue.nombre}"
 
                 nueva_meta = MetaPresupuestal(
